@@ -1,0 +1,6 @@
+# Keep the published sources LF-only; the bundle ships to macOS/Linux hosts too.
+* text=auto eol=lf
+*.svg text eol=lf
+*.png binary
+*.jpg binary
+*.webp binary

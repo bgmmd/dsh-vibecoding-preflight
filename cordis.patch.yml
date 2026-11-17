@@ -1,0 +1,8 @@
+- insert:
+    - id: vibecoding-preflight
+      name: dsh-vibecoding-preflight
+      config:
+        autoPull: true
+        aiFamiliarize: true
+        commitListLimit: 20
+        timeoutMs: 120000

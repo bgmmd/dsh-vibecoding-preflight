@@ -1,0 +1,61 @@
+{
+  "name": "dsh-vibecoding-preflight",
+  "version": "0.1.0",
+  "description": "Git preflight check for vibecoding sessions in DeepSeek Harness: detects whether the project is a Git repository, compares the local branch with its upstream, pulls remote commits for the AI to review, and asks you to confirm pushing local commits.",
+  "type": "module",
+  "license": "MIT",
+  "author": "bgmmd",
+  "homepage": "https://github.com/bgmmd/dsh-vibecoding-preflight",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bgmmd/dsh-vibecoding-preflight.git"
+  },
+  "bugs": {
+    "url": "https://github.com/bgmmd/dsh-vibecoding-preflight/issues"
+  },
+  "keywords": [
+    "dsh",
+    "deepseek-harness",
+    "dsh-plugin",
+    "git",
+    "vibecoding",
+    "preflight",
+    "workflow"
+  ],
+  "engines": {
+    "dsh": ">=0.2.1-rc.3 <0.3.0"
+  },
+  "scripts": {
+    "test": "node --test"
+  },
+  "exports": {
+    ".": "./index.js",
+    "./client": "./client.js",
+    "./locale/*.json": "./locale/*.json",
+    "./icon": "./icon.svg"
+  },
+  "files": [
+    "index.js",
+    "client.js",
+    "cordis.patch.yml",
+    "locale/*.json",
+    "docs",
+    "icon.svg",
+    "README.md",
+    "README.zh.md",
+    "LICENSE"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "immediately": true,
+      "inject": [
+        "@deepseek-ai/dsh-client-locale",
+        "@deepseek-ai/dsh-client-ui-conversation"
+      ]
+    }
+  }
+}

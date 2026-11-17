@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="300" viewBox="0 0 640 300" role="img" aria-label="Git preflight button and result panel illustration">
+  <defs>
+    <linearGradient id="p-bg" x1="0" y1="0" x2="640" y2="300" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#f4f7fb"/>
+      <stop offset="1" stop-color="#e3ebf5"/>
+    </linearGradient>
+    <linearGradient id="p-btn" x1="440" y1="48" x2="584" y2="76" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#2f6fb3"/>
+      <stop offset="1" stop-color="#1d4e86"/>
+    </linearGradient>
+  </defs>
+  <rect width="640" height="300" rx="16" fill="url(#p-bg)"/>
+
+  <!-- Conversation header with the pill button -->
+  <rect x="28" y="34" width="584" height="52" rx="12" fill="#ffffff" stroke="#d7e0ea" stroke-width="1.5"/>
+  <circle cx="56" cy="60" r="10" fill="#e6edf6"/>
+  <rect x="74" y="52" width="118" height="7" rx="3.5" fill="#c8d5e4"/>
+  <rect x="74" y="65" width="72" height="6" rx="3" fill="#e0e8f2"/>
+  <rect x="432" y="47" width="152" height="27" rx="13.5" fill="url(#p-btn)"/>
+  <circle cx="450" cy="56.5" r="3.4" fill="none" stroke="#eaf2ff" stroke-width="1.8"/>
+  <circle cx="450" cy="66.5" r="3.4" fill="none" stroke="#eaf2ff" stroke-width="1.8"/>
+  <circle cx="459.5" cy="61" r="3.4" fill="none" stroke="#eaf2ff" stroke-width="1.8"/>
+  <rect x="469" y="58" width="58" height="6" rx="3" fill="#dce9fb"/>
+  <path d="m556 56 3.2 3.4 5.6-6.6" fill="none" stroke="#8ff0b4" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Result panel: branch chips + commit list + actions -->
+  <rect x="36" y="106" width="356" height="168" rx="12" fill="#ffffff" stroke="#d7e0ea" stroke-width="1.5"/>
+  <circle cx="58" cy="128" r="4.5" fill="#2f6fb3"/>
+  <rect x="70" y="124" width="92" height="8" rx="4" fill="#b9c8da"/>
+  <rect x="332" y="120" width="12" height="12" rx="3" fill="#e7edf5"/>
+  <path d="M335.5 126h5" stroke="#9fb0c4" stroke-width="1.6" stroke-linecap="round"/>
+
+  <rect x="54" y="146" width="86" height="20" rx="10" fill="#f0f4f9" stroke="#dde5ee" stroke-width="1"/>
+  <rect x="62" y="153" width="46" height="6" rx="3" fill="#c2cfdf"/>
+  <rect x="148" y="146" width="112" height="20" rx="10" fill="#f0f4f9" stroke="#dde5ee" stroke-width="1"/>
+  <rect x="156" y="153" width="72" height="6" rx="3" fill="#c2cfdf"/>
+  <rect x="268" y="146" width="58" height="20" rx="10" fill="#fdf3e2" stroke="#f0d3a2" stroke-width="1"/>
+  <rect x="276" y="153" width="30" height="6" rx="3" fill="#dfb878"/>
+
+  <rect x="54" y="180" width="322" height="62" rx="8" fill="#fbfcfe" stroke="#e3e9f1" stroke-width="1"/>
+  <circle cx="70" cy="196" r="3" fill="#2f6fb3"/>
+  <rect x="80" y="193" width="44" height="6" rx="3" fill="#9db0c6"/>
+  <rect x="132" y="193" width="150" height="6" rx="3" fill="#d5dfeb"/>
+  <path d="M70 217h1" stroke="#e3e9f1" stroke-width="1"/>
+  <circle cx="70" cy="217" r="3" fill="#5b8fc9"/>
+  <rect x="80" y="214" width="44" height="6" rx="3" fill="#9db0c6"/>
+  <rect x="132" y="214" width="120" height="6" rx="3" fill="#d5dfeb"/>
+  <circle cx="70" cy="232" r="0"/>
+  <rect x="80" y="226" width="44" height="0" rx="0" fill="#ffffff"/>
+  <rect x="54" y="230" width="322" height="0.8" fill="#eef2f7"/>
+
+  <rect x="252" y="252" width="58" height="22" rx="6" fill="#ffffff" stroke="#d7e0ea" stroke-width="1.2"/>
+  <rect x="262" y="260" width="38" height="6" rx="3" fill="#becbdb"/>
+  <rect x="318" y="252" width="58" height="22" rx="6" fill="#2f6fb3"/>
+  <rect x="328" y="260" width="38" height="6" rx="3" fill="#dce9fb"/>
+  <path d="M352 262.5v7M349 265.5l3-3 3 3" fill="none" stroke="#ffffff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- AI review bubble -->
+  <rect x="412" y="120" width="188" height="118" rx="12" fill="#ffffff" stroke="#d7e0ea" stroke-width="1.5"/>
+  <path d="M436 142l3.2 6.4 6.4 3.2-6.4 3.2-3.2 6.4-3.2-6.4-6.4-3.2 6.4-3.2z" fill="#2f6fb3"/>
+  <rect x="434" y="170" width="140" height="7" rx="3.5" fill="#cfdae8"/>
+  <rect x="434" y="184" width="128" height="7" rx="3.5" fill="#dde5ef"/>
+  <rect x="434" y="198" width="96" height="7" rx="3.5" fill="#e5ebf3"/>
+  <rect x="434" y="212" width="112" height="7" rx="3.5" fill="#e5ebf3"/>
+
+  <!-- Divergence-free arrow from remote to local -->
+  <path d="M404 176h20" stroke="#8aa4c0" stroke-width="2" stroke-linecap="round"/>
+  <path d="m418 170 6 6-6 6" fill="none" stroke="#8aa4c0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

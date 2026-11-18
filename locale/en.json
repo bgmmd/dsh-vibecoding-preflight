@@ -1,4 +1,4 @@
-﻿{
+{
   "meta": {
     "title": "Vibecoding Git preflight",
     "description": "Adds a Git preflight button to the conversation header. It is greyed out outside a Git repository; otherwise one click fetches the remote and compares the local branch with its upstream: identical branches only show a notice, a remote that is ahead is pulled and the changed commits are handed to the AI to review, and local commits that are ahead are listed so you can confirm the push. Use it right before asking the AI to edit code.",

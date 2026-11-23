@@ -230,11 +230,11 @@ test('renders the icon and label inside the button element', () => {
   assert.equal(buttonChildren[1].type, 'span')
   assert.equal(typeof buttonChildren[1].props.children[0], 'string')
 
-  // While the initial status is still loading the control is advertised as
-  // inert but stays in the tab order for keyboard users.
-  assert.equal(button.props['aria-disabled'], 'true')
+  // While the initial status is still loading the control is muted but still
+  // clickable, so a directory that becomes a repository recovers on click.
+  assert.equal(button.props['data-muted'], 'true')
   assert.equal(button.props['aria-haspopup'], 'dialog')
   assert.equal(button.props['aria-expanded'], false)
-  assert.equal(button.props['data-disabled'], 'true')
-  assert.equal(button.props.disabled, undefined, 'no native disabled attribute; aria-disabled keeps it focusable')
+  assert.equal(button.props.disabled, false, 'muted is not the native disabled attribute')
+  assert.equal(typeof button.props.onClick, 'function', 'the muted button must still re-check on click')
 })

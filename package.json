@@ -1,6 +1,6 @@
 {
   "name": "dsh-vibecoding-preflight",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Git preflight check for vibecoding sessions in DeepSeek Harness: detects whether the project is a Git repository, compares the local branch with its upstream, pulls remote commits for the AI to review, and asks you to confirm pushing local commits.",
   "type": "module",
   "license": "MIT",

@@ -8,7 +8,7 @@ Before asking the AI to change code, make sure it starts from the latest code an
 
 ## What it does
 
-- **Non-repository projects are greyed out.** The button checks the session directory with `git rev-parse --is-inside-work-tree` when the session opens; outside a Git work tree it is disabled with an explanatory tooltip.
+- **Non-repository projects are muted.** The button checks the session directory with `git rev-parse --is-inside-work-tree` when the session opens; outside a Git work tree it is greyed out with an explanatory tooltip. It stays clickable and re-checks on click, every 20 seconds, and whenever the window regains focus, so a directory that becomes a repository (`git init`) recovers without a page reload.
 - **One click runs the whole preflight** for the current branch and its upstream:
   - **identical** — the local branch matches the remote: only a notice, nothing is executed;
   - **remote ahead** — `git pull --ff-only` runs automatically, then the changed commits and `git diff --stat` are handed to the current Agent as a follow-up prompt so it reviews what changed;

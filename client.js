@@ -2,7 +2,7 @@
  * Client half of the `dsh-vibecoding-preflight` bundle.
  *
  * Registers one pill button in the conversation header actions band. The button
- * is disabled while the Session directory is not a Git work tree, and clicking
+ * is muted while the Session directory is not a Git work tree, and clicking
  * it runs the preflight workflow against the Host routes:
  *
  * 1. `check` — fetch, compare, and (when the remote is ahead) pull;
@@ -29,7 +29,7 @@ window.__ModuleLoader__.load({
       'button.label': 'Git preflight',
       'button.busy': 'Checking…',
       'button.tooltip': 'Check whether this project is a Git repository and whether the local branch matches its remote.',
-      'button.disabled': 'This project is not a Git repository, so the preflight check is unavailable.',
+      'button.disabled': 'This project is not a Git repository. Click to check again.',
       'button.unavailable': 'The Git preflight check is unavailable right now.',
       'button.state.upToDate': 'Up to date',
       'button.state.ahead': 'Push pending',
@@ -78,7 +78,7 @@ window.__ModuleLoader__.load({
       'button.label': 'Git 检查',
       'button.busy': '检查中…',
       'button.tooltip': '检查当前项目是否为 Git 仓库，以及本地分支与远程分支是否一致。',
-      'button.disabled': '当前项目不是 Git 仓库，无法执行前置检查。',
+      'button.disabled': '当前项目不是 Git 仓库，点击可重新检测。',
       'button.unavailable': 'Git 前置检查当前不可用。',
       'button.state.upToDate': '已同步',
       'button.state.ahead': '待推送',
@@ -192,10 +192,33 @@ window.__ModuleLoader__.load({
       const statusReady = status.phase === 'ready'
       const notRepo = statusReady && status.result?.isRepo === false
       const statusFailed = statusReady && status.result?.ok === false
-      // A failed status still opens the panel so the reason and a retry stay
-      // reachable; only a known non-repository Session keeps it inert.
-      const interactive = statusReady && !notRepo
-      const disabled = !interactive
+      // A non-repository Session keeps the muted style but stays operable: a
+      // directory can turn into a repository (`git init`) while the Session
+      // stays open, so a click must re-check instead of staying grey forever.
+      const muted = !statusReady || notRepo || statusFailed
+      const wasMutedRef = React.useRef(true)
+
+      // While the preflight is unavailable, poll the cheap status route and
+      // re-read it whenever the window regains focus, so the button recovers
+      // without a page reload.
+      React.useEffect(() => {
+        if (!muted) return undefined
+        const timer = window.setInterval(() => { loadStatus() }, 20000)
+        return () => window.clearInterval(timer)
+      }, [muted, loadStatus])
+
+      React.useEffect(() => {
+        const refresh = () => { loadStatus() }
+        const onVisibility = () => {
+          if (document.visibilityState === 'visible') refresh()
+        }
+        window.addEventListener('focus', refresh)
+        document.addEventListener('visibilitychange', onVisibility)
+        return () => {
+          window.removeEventListener('focus', refresh)
+          document.removeEventListener('visibilitychange', onVisibility)
+        }
+      }, [loadStatus])
 
       const run = React.useCallback(async (action) => {
         setBusy(true)
@@ -241,6 +264,15 @@ window.__ModuleLoader__.load({
         panelRef.current?.focus()
         return () => window.removeEventListener('keydown', onKeyDown)
       }, [open, closePanel])
+
+      // If the poll discovers a repository while the panel still shows the
+      // "not a repository" result, run the workflow instead of leaving stale
+      // copy on screen.
+      React.useEffect(() => {
+        const repoNow = statusReady && status.result?.ok === true && status.result.isRepo === true
+        if (repoNow && wasMutedRef.current && open && panel?.state === 'not-repo') run('check')
+        if (statusReady) wasMutedRef.current = !repoNow
+      }, [statusReady, status.result, open, panel, run])
 
       // The button advertises the last known result without opening the panel.
       const summaryState = panel?.state
@@ -295,14 +327,14 @@ window.__ModuleLoader__.load({
           type: 'button',
           className: 'vbp-btn',
           'data-state': buttonState,
-          'data-disabled': disabled ? 'true' : 'false',
-          'aria-disabled': disabled ? 'true' : 'false',
+          'data-muted': muted ? 'true' : 'false',
           'aria-haspopup': 'dialog',
           'aria-expanded': open,
           'aria-busy': busy,
+          disabled: busy,
           title: tooltip,
           'aria-label': `${t('button.label')} — ${tooltip}`,
-          onClick: interactive && !busy ? openPanel : undefined,
+          onClick: openPanel,
         },
         h(Glyph, { state: buttonState }),
         h('span', { className: 'vbp-btn-label' }, stateLabel)),
@@ -580,13 +612,20 @@ window.__ModuleLoader__.load({
   transition: background-color .15s ease, color .15s ease;
   white-space: nowrap;
 }
-.vbp-btn:hover:not([data-disabled="true"]):not(:disabled) {
+.vbp-btn:hover:not(:disabled) {
   background: var(--dsw-alias-interactive-bg-hover);
   color: var(--dsw-alias-label-primary);
 }
-.vbp-btn[data-disabled="true"],
-.vbp-btn:disabled {
+.vbp-btn[data-muted="true"] {
   color: var(--dsw-alias-label-tertiary);
+  opacity: .7;
+}
+.vbp-btn[data-muted="true"]:hover:not(:disabled) {
+  background: var(--dsw-alias-interactive-bg-hover);
+  color: var(--dsw-alias-label-secondary);
+  opacity: .85;
+}
+.vbp-btn:disabled {
   cursor: not-allowed;
   opacity: .6;
 }

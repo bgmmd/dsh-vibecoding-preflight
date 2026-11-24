@@ -10,7 +10,7 @@
 import assert from 'node:assert/strict'
 import { spawnSync } from 'node:child_process'
 import { EventEmitter } from 'node:events'
-import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs'
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { after, before, test } from 'node:test'
@@ -301,4 +301,35 @@ test('reports a detached HEAD as such without touching the repository', async ()
   assert.equal(check.body.detached, true)
   assert.equal(git(work, ['rev-parse', 'HEAD']), head)
   assert.equal(git(work, ['rev-parse', '--abbrev-ref', 'HEAD']), 'HEAD')
+})
+
+test('a colliding pull fails safe and leaves no conflicted tree', async () => {
+  git(work, ['checkout', 'main'])
+  git(work, ['fetch', 'origin'])
+  git(work, ['reset', '--hard', 'origin/main'])
+  const slug = 'incoming-change-that-collides.txt'
+  remoteCommit('incoming change that collides')
+  // Local work in progress on the same path the incoming commit adds.
+  writeFileSync(join(work, slug), 'local work in progress\n')
+  const headBefore = git(work, ['rev-parse', 'HEAD'])
+
+  const { routes, followups } = mount(work)
+  const result = await call(routes, 'check', { sessionId: SESSION_ID })
+
+  // The request still succeeds: the pull refusal is a reported state, not a crash.
+  assert.equal(result.status, 200)
+  assert.equal(result.body.ok, true)
+  assert.equal(result.body.state, 'error')
+  assert.equal(result.body.phase, 'pull')
+  assert.match(result.body.detail, /overwritten|local changes/i)
+
+  // Nothing moved, nothing was clobbered, and no merge/conflict state exists.
+  assert.equal(git(work, ['rev-parse', 'HEAD']), headBefore)
+  assert.equal(readFileSync(join(work, slug), 'utf8'), 'local work in progress\n')
+  assert.equal(existsSync(join(work, '.git', 'MERGE_HEAD')), false)
+  assert.equal(existsSync(join(work, '.git', 'rebase-merge')), false)
+  const porcelain = git(work, ['status', '--porcelain'])
+  assert.match(porcelain, /^\?\? incoming-change-that-collides\.txt$/m)
+  assert.doesNotMatch(porcelain, /^(UU|AA|DD|AU|UA|DU|UD) /m)
+  assert.equal(followups.length, 0)
 })

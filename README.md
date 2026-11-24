@@ -46,6 +46,7 @@ The row config in `cordis.patch.yml` is passed straight to the Host half and can
 ## Limitations
 
 - Only the current branch and its configured upstream are handled; multiple remotes, detached HEAD, and worktrees are reported rather than acted on.
+- Pulls use `git pull --ff-only`. If incoming changes collide with local work (modified or untracked files), git aborts the pull and the panel shows the exact reason: the plugin never starts a merge, so it cannot leave conflict markers, a conflicted index, or a half-finished merge behind. Commit or stash, then check again.
 - Network access relies on the system `git` configuration (credentials, proxies, SSH keys). A fetch/push failure is shown verbatim; the plugin never stores or asks for credentials.
 - The "AI review" is a normal user-visible follow-up turn: it appears in the session log and may take a moment while the Agent reads the diff.
 - Requires a DSH build that provides `webServer`, `sessions`, `agents`, and `workingDirectory` services (Web GUI / desktop builds).
